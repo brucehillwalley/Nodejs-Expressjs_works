@@ -5,11 +5,11 @@ NODE MODULES
 console.log("this line is in modules.js");
 
 //? single func
-// export const testFunction = function(){
-//     console.log("this is a test function");
-// }
+const hiFunction = function(){
+    console.log("Selam Dunya");
+}
 
-// module.exports=testFunction()
+module.exports=hiFunction()
 
 //? multi func
 // const testFunctionA = function () {

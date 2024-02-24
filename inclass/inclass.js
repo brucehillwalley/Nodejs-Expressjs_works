@@ -26,3 +26,7 @@ console.log(PI);
 require("dotenv").config();
 console.log(process.env.PORT);
 console.log(process.env.HOST);
+console.log(process.env.SAMPLE_TEXT);
+
+require("express")
+console.log();
