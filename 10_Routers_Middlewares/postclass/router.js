@@ -45,7 +45,7 @@ const PORT = process.env.PORT || 8000;
 // const router=require('./routes/index')
 // const router=require('./routes')
 // app.use(router) 
-app.use(require('./routes'))
+app.use(require('./routes')) //|routes klasöründen import edildi
 
 
 /* ------------------------------------------------------- */
