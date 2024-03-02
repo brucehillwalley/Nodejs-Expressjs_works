@@ -27,9 +27,8 @@ const PORT = process.env.PORT || 8000;
 //       }
 //   }catch(err){
 
-
-        // // next içinde bir hata objesi gönderirsek, errorHanler yakalar.
-        // next(err)
+// // next içinde bir hata objesi gönderirsek, errorHanler yakalar.
+// next(err)
 //     res.send({
 //         error:true,
 //         message:err.message,
@@ -37,49 +36,59 @@ const PORT = process.env.PORT || 8000;
 
 //   }
 
-
-
 // });
 
 /* ------------------------------------------------------- */
 
+// app.get("/*", (req, res) => {
+//     //! ilk önce status code a bakılır hata mesajına değil
+//     //*res ile gönderme standartdır. req de kullanılabilirdi.
+//     res.errorStatusCode=404
+//     throw new Error("Something went wrong!");
+// })
+/* ------------------------------------------------------- */
 
-app.get("/*", (req, res) => {
-    //! ilk önce status code a bakılır hata mesajına değil
-    //*res ile gönderme standartdır. req de kullanılabilirdi.
-    res.errorStatusCode=404
-    throw new Error("Something went wrong!");
+// const asyncFunction = async () => {
+//   throw new Error("Error in async function");
+// };
+
+// app.get("/async", async (req, res, next) => {
+//   await asyncFunction().then().catch(next); // Catch error by errorHandler
+// });
+
+/* ------------------------------------------------------- */
+//? npm i express-async-errors => bu modül işimizi kolaylaştırır
+require("express-async-errors");
+
+app.get("/async", async (req, res, next) => {
+  throw new Error("Error in async function");
+    
 })
 
 
-
-
-
-
-
-
-
 /* ------------------------------------------------------- */
 /* ------------------------------------------------------- */
 /* ------------------------------------------------------- */
-/* ------------------------------------------------------- */
-/* ------------------------------------------------------- */
-//* ERROR HANDLER
+// //* ERROR HANDLER
 
-//? errorHandler middleware'i eklendi. errorHandler en son root tur.
-const errorHandler = (err, req, res, next) => {
+// //? errorHandler middleware'i eklendi. errorHandler en son root tur.
+// const errorHandler = (err, req, res, next) => {
+//   console.log("errorHandler calisti.");
 
-    console.log("errorHandler calisti.");
+//   const errorStatusCode = res?.errorStatusCode || 500;
 
-    const  errorStatusCode=res?.errorStatusCode || 500
+//   res.status(errorStatusCode).send({
+//     error: true,
+//     message: err.message,
+//     cause: err.cause,
+//     stack: err.stack,
+//   });
+// };
 
-    res.status(errorStatusCode).send({
-        error:true,
-        message:err.message,
-        cause:err.cause,
-        stack:err.stack
-    })
-}
+// app.use(errorHandler);
+
+app.use(require('./errorHandler'))
+
 
 
 /* ------------------------------------------------------- */
