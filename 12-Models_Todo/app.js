@@ -15,9 +15,9 @@ app.use(express.json())
 
 require('express-async-errors')
 
-app.all('/', (req, res) => {
-    res.send('WELCOME TO TODO API')
-})
+// app.all('/', (req, res) => {
+//     res.send('WELCOME TO TODO API')
+// })
 
 /* ------------------------------------------------------- */
 const {Sequelize, DataTypes} = require('sequelize')
@@ -59,7 +59,7 @@ const Todo=sequelize.define('todos',{
         type:DataTypes.BOOLEAN,
         allowNull:false,
         default:false
-    },
+    }
 
     // createdAt ve updatedAt alanlarını sequelize otomatik olarak oluşturur
 
@@ -75,6 +75,70 @@ const Todo=sequelize.define('todos',{
 sequelize.authenticate()
 .then(() => console.log('Connection has been established successfully.'))
 .catch(()=> console.log('Unable to connect to the database:'))
+
+/* ------------------------------------------------------- */
+// ROUTES:
+const router=express.Router()
+
+router.get('/', async(req,res)=>{
+    const data = await Todo.findAndCountAll()
+    res.status(200).send({
+        error:false,
+        result:data
+    })
+})
+
+
+
+
+
+router.post('/', async(req,res)=>{
+
+    const receivedData = req.body
+    
+    const data = await Todo.create({
+        title:receivedData.title,
+        description:receivedData.description,
+        priority:receivedData.priority,
+        isDone:receivedData.isDone,
+    
+    })
+ console.log(data);
+
+
+    res.status(201).send({
+        error:false,
+        result:data.dataValues
+    })
+})
+
+// read todo:
+router.get('/:id', async(req,res)=>{
+    // const data = await Todo.findOne({
+    //     where:{
+    //         id:req.params.id
+    //     }        
+    // })
+
+    const data = await Todo.findByPk(req.params.id)
+
+    res.status(200).send({
+        error:false,
+        result:data
+    })
+})
+
+
+
+app.use(router)
+
+
+
+
+
+
+
+
 
 /* ------------------------------------------------------- */
 const errorHandler = (err, req, res, next) => {
