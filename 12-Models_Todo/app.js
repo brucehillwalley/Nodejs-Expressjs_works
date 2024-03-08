@@ -10,178 +10,145 @@ require("dotenv").config();
 const PORT = process.env.PORT || 8000;
 
 /* ------------------------------------------------------- */
-// Accept json data: json veri kabul etmesi için
+// Accept json data: // json veri kabul etmesi icin
 app.use(express.json())
 
+// Catch async-errors:
 require('express-async-errors')
 
-// app.all('/', (req, res) => {
+// app.all('/abc', (req, res) => { // Allow all methods. all -> URL=/ - use -> URL=/*
 //     res.send('WELCOME TO TODO API')
 // })
+/* ------------------------------------------------------- */
+// MODELS:
+
+const { Sequelize, DataTypes } = require('sequelize')
+// sequelize instance oluştur:
+const sequelize = new Sequelize('sqlite:./db.sqlite3') // Sequileze motoru çalıştırılarak veritabanı oluşturulur. 
+
+// define methodu sequelize modeli oluşturur:
+// her bir model, veritabanında bir tabloya denk gelir.
+// sequelize.define('tableName', {  modelDetails  })
+
+const Todo = sequelize.define('todos', {
+
+    // ilk sutun olarak id sutunu sequelize tarafından otomatik oluşturulur/yönetilir.
+    // anyFieldName: {
+    //     type: DataTypes.INTEGER,
+    //     allowNull: false, // default: true
+    //     unique: true, // default: false
+    //     comment: 'description',
+    //     primaryKey: true, // default: false
+    //     autoIncrement: true, // default: false
+    //     field: 'custom_name',
+    //     defaultValue: 'default', // default: null
+    // },
+
+    title: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+
+    description: DataTypes.TEXT, // ShortHand Using.
+
+    priority: { // -1: Low, 0: Norm, 1: High
+        type: DataTypes.TINYINT,
+        allowNull: false,
+        defaultValue: 0
+    },
+
+    isDone: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    }
+
+    //? Not need define createdAt & updatedAt fields.
+    //?id, createdAt ve updatedAt tanımlamaya gerek yoktur. Sequelize otomatik oluşturur/yönetir.
+})
+
+// Syncronization:
+// Model bilgilerini db'ye uygula:
+// sequelize.sync() // CREATE TABLE
+// sequelize.sync({ force: true }) // DROP TABLE & CREATE TABLE
+// sequelize.sync({ alter: true }) // TO BACKUP & DROP TABLE & CREATE TABLE & FROM BACKUP
+
+// Connect to db:
+sequelize.authenticate()
+    .then(() => console.log('* DB Connected *'))
+    .catch(() => console.log('* DB Not Connected *'))
 
 /* ------------------------------------------------------- */
-// const {Sequelize, DataTypes} = require('sequelize')
-// // sequlize instant oluşturulur
+// ROUTERS:
 
-// const sequelize = new Sequelize('sqlite:./db.sqlite3')
-// // define methodu sequelize modeli olusturur:
-// // her bir model, veritabaninda bir tabloya denk gelir.
-// // sequelize.define('tableName',{modelDetails})
+const router = express.Router()
 
-// const Todo=sequelize.define('todos',{
-//     // sequlize otomatik olarak id olarak verilir
-//     // anyFieldName:{
-//     //     type:DataTypes.INTEGER,
-//     //     allowNull:false, //default true
-//     //     unique:true, //default: false
-//     //     comment:'description',
-//     //     primaryKey:true, //default: false
-//     //     autoIncrement:true, //default: false
-//     //     field:'custum_name',
-//     //     defaultValue:'default', //default: null
-//     // }
+// LIST TODOS:
+router.get('/', async (req, res) => {
 
-//     title:{
-//         type:DataTypes.STRING,
-//         allowNull:false,
+    // const data = await Todo.findAll()
+    const data = await Todo.findAndCountAll()
 
-//     },
+    res.status(200).send({
+        error: false,
+        result: data
+    })
+})
 
-//     description:DataTypes.TEXT,
-//     priority:{
-//         // -1:Low, 0:Normal, 1:High
-//         type:DataTypes.TINYINT, 
-//         allowNull:false,
-//         defaultValue:0
-//     },
+//? CRUD Processes:
 
-//     isDone:{
-//         type:DataTypes.BOOLEAN,
-//         allowNull:false,
-//         defaultValue:false
-//     }
+// CREATE TODO:
+router.post('/', async (req, res) => {
 
-//     // id, createdAt ve updatedAt alanlarını sequelize otomatik olarak oluşturur
+    // const receivedData = req.body
 
-// })
+    // const data = await Todo.create({
+    //     title: receivedData.title,
+    //     description: receivedData.description,
+    //     priority: receivedData.priority,
+    //     isDone: receivedData.isDone,
+    //     // newKey: 'newValue' // Modelde tanımlanmadığı için bir işe yaramayacaktır.
+    // })
 
-// // Syncronition:
+    const data = await Todo.create(req.body)
 
-// // sequelize.sync() // CREATE TABLE IF NOT EXISTS (ONCE) ilk defa
-// // sequelize.sync({force:true}) // DROP TABLE and CREATE TABLE (ONCE)
-// // sequelize.sync({alter:true}) //TO BACK UP AND DROP TABLE and CREATE TABLE AND FROM BACKUP
+    res.status(201).send({
+        error: false,
+        result: data.dataValues //? verinin db ye kaydedilmiş hali olan veriyi verir.
+    })
+})
 
-// // cONNECT TO DATABASE:
-// sequelize.authenticate()
-// .then(() => console.log('Connection has been established successfully.'))
-// .catch(()=> console.log('Unable to connect to the database:'))
+// READ TODO:
+router.get('/:id', async (req, res) => {
 
-/* ------------------------------------------------------- */
-// Model Import
-const Todo = require('./todo.model')
-/* ------------------------------------------------------- */
-// // ROUTES:
-// const router=express.Router()
+    // const data = await Todo.findOne({ where: { id: req.params.id } })
+    const data = await Todo.findByPk(req.params.id)
 
-// router.get('/', async(req,res)=>{
-//     const data = await Todo.findAndCountAll()
-//     res.status(200).send({
-//         error:false,
-//         result:data
-//     })
-// })
+    res.status(200).send({
+        error: false,
+        result: data
+    })
+
+})
+
+// UPDATE TODO:
+router.put('/:id', async (req, res) => {
+
+// const data = await Todo.uptade({...newData}, {...where})
+
+const data = await Todo.update(req.body, {where:{id:req.params.id}})
+res.status(202).send({
+error:false,
+message:'Updated',
+body:req.body,
+result:data,
+new: await Todo.findByPk(req.params.id) // güncellenmiş veriyi gösterir.
+})
+
+})
 
 
-
-
-
-// router.post('/', async(req,res)=>{
-
-//     const receivedData = req.body
-    
-//     const data = await Todo.create({
-//         title:receivedData.title,
-//         description:receivedData.description,
-//         priority:receivedData.priority,
-//         isDone:receivedData.isDone,
-    
-//     })
-//  console.log(data);
-
-
-//     res.status(201).send({
-//         error:false,
-//         result:data.dataValues
-//     })
-// })
-
-// // read todo:
-// router.get('/:id', async(req,res)=>{
-//     // const data = await Todo.findOne({
-//     //     where:{
-//     //         id:req.params.id
-//     //     }        
-//     // })
-
-//     const data = await Todo.findByPk(req.params.id)
-
-//     res.status(200).send({
-//         error:false,
-//         result:data
-//     })
-// })
-
-// router.put('/:id', async(req,res)=>{
-//     const data = await Todo.update(req.body,{
-//         where:{
-//             id:req.params.id
-//         }
-//     })
-//     res.status(202).send({
-//         error:false,
-//         message:'updated',
-//         body:req.body,
-//         results:data,
-//         new: await Todo.findByPk(req.params.id) // güncellenmiş datayı gösterir
-//     })
-// })
-
-// router.delete('/:id', async(req,res)=>{
-//     const data = await Todo.destroy({
-//         where:{
-//             id:req.params.id
-//         }
-//     })
-//     // console.log(data);
-// //? 204 No Content ==> ekrana çıktı vermeye bilir
-//     // res.status(204).send({
-//     //     error:false,
-//     //     message:'deleted',
-//     //     result:data
-//     // })
-//    if(data>0){
-//     res.sendStatus(204)
-//    }else{
-//     // res.status(404).send({
-//     //     error:true,
-//     //     result:data
-//     // })
-
-//     res.errorStatusCode = 404
-//     throw new Error('Not Found')
-//    }
-// })
-
-
-// app.use(router)
-
-
-
-
-
-
-
-
+app.use(router)
 
 /* ------------------------------------------------------- */
 const errorHandler = (err, req, res, next) => {
