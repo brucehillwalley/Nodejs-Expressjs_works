@@ -28,7 +28,7 @@
 	db.getCollectionNames() // List by array.
 	db.getCollectionInfos() // List by array with details.
 	db.createCollection('collName') // Create
-	db.collName.renameCollection('collName2') // Update
+	db.people.renameCollection('collName2') // Update
 	db.collName2.drop() // Drop
 
 
@@ -38,7 +38,7 @@
 	// db.coll.insertOne( { new_values } )
 	// db.coll.insertMany( [ { new_values } ] )
 	db.coll.insertOne({ firstName: 'Test', lastName: 'Test', age: 10 })
-	db.coll.insertMany([ // in array[]
+	db.people.insertMany([ // in array[]
 		{ firstName: 'Test1', lastName: 'Test1', age: 11 },
 		{ firstName: 'Test2', lastName: 'Test2', age: 12 },
 		{ firstName: 'Test3', lastName: 'Test3', age: 13 },
