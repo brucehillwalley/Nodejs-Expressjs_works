@@ -21,7 +21,10 @@ const HOST = process.env.HOST || "127.0.0.1";
 require("./src/dbConnection")
 
 
-app.all("*",(req,res)=>res.send("Welcome to blog api with mongoose"))
+app.all("/",(req,res)=>res.send("Welcome to blog api with mongoose"))
+app.use('/blog',require('./src/routes/blog.route'))
+
+
 
 app.use(require('./src/errorHandler')) //aşağıda kalmalı
 

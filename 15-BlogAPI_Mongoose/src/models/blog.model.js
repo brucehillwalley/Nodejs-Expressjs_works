@@ -5,6 +5,46 @@
 
 const mongoose = require("mongoose");
 
+const blogPostSchema = new mongoose.Schema(
+    {
+        //? _id gerek yok otomotik oluşturulur.
+        //categoryId:
+        title:{
+            type:String,
+            trim: true,
+            required: true,
+        },
+        content:{
+            type:String,
+            trim: true,
+            required: true,
+        },
+        // createdAt, // otomatik oluşturulur
+        //  updatedAt, // otomatik oluşturulur
+
+    },
+    {
+        collection: "blogPost",
+        timestamps: true
+    })
+
+    //? model mongoose.model("model adı", hangi şema)
+//   const BlogPostModel =  mongoose.model("BlogPost", blogPostSchema)
+//   module.exports={
+//     BlogPost: BlogPostModel
+//   }
+
+  module.exports={
+    BlogPost: mongoose.model("BlogPost", blogPostSchema),
+  }
+
+
+
+
+
+
+
+
 // const nameSchema = new mongoose.Schema({fields},{tablo adı})
 /*
 const blogSchema = new mongoose.Schema(
@@ -24,8 +64,8 @@ const blogSchema = new mongoose.Schema(
             required: [true, 'error message'], // veri girişi gerekli mi değil mi?, hata mesajı
             enum: [[1,2,3], 'error message'], // belirli bir paterne göre veri girişi
             validate: [function(data){return true}, 'error message'], // veriyi fonksiyon ile dogrulama
-            get: function(data){return true}, // veriyi çağırırken çalışacak fonk
-            set: function(data){return true}, // veriyi kaydederken çalışacak fonksion
+            get: function(data){return data}, // veriyi çağırırken çalışacak fonk
+            set: function(data){return data}, // veriyi kaydederken çalışacak fonksion
         }
     },
     {
@@ -33,3 +73,4 @@ const blogSchema = new mongoose.Schema(
         timestamps: true, // olusturma ve güncelleme zamanı    
     })
     */
+
