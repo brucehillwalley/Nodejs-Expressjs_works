@@ -19,7 +19,8 @@ const HOST = process.env.HOST || "127.0.0.1";
 require("./src/configs/dbConnection");
 
 app.all("/", (req, res) => res.send("Welcome to blog api with mongoose"));
-app.use("/blog", require("./src/routes/blog.route"));
+app.use("/user", require("./src/routes/user.router"));
+app.use("/blog", require("./src/routes/blog.router"));
 
 app.use(require("./src/middlewares/errorHandler")); //error handler middleware'ı aşağıda kalmalı
 
