@@ -4,9 +4,24 @@
 /* ====================================================== */
 const router = require("express").Router();
 
-const { route } = require("express/lib/router");
-const {BlogPost} = require("../controllers/blog.controller");
+const { BlogPost } = require("../controllers/blog.controller");
+const { BlogCategory } = require("../controllers/blog.controller");
 
+
+// BlogCategory:
+router.route('/categories')
+    .get(BlogCategory.list)
+    .post(BlogCategory.create)
+router.route('/categories/:categoryId')
+    .get(BlogCategory.read)
+    .put(BlogCategory.update) // put patch aynı
+    .patch(BlogCategory.update)
+    .delete(BlogCategory.delete)
+
+
+
+
+// BlogPost
 router.route("/posts").get(BlogPost.list).post(BlogPost.create);
 
 router

@@ -1,49 +1,70 @@
-"use strict"
+"use strict";
 /*
     BLOG API with Mongoose
 */
 
 const mongoose = require("mongoose");
 
-const blogPostSchema = new mongoose.Schema(
-    {
-        //? _id gerek yok otomotik oluşturulur.
-        //categoryId:
-        title:{
-            type:String,
-            trim: true,
-            required: true,
-        },
-        content:{
-            type:String,
-            trim: true,
-            required: true,
-        },
-        // createdAt, // otomatik oluşturulur
-        //  updatedAt, // otomatik oluşturulur
-
+// BLOG CATEGORY:
+const blogCategorySchema = new mongoose.Schema(
+  {
+    //? _id gerek yok otomotik oluşturulur.
+    name: {
+      type: String,
+      trim: true,
+      required: true,
     },
-    {
-        collection: "blogPost",
-        timestamps: true
-    })
+  },
+  {
+    collection: "blogCategory",
+    timestamps: true,
+  }
+);
 
-    //? model mongoose.model("model adı", hangi şema)
+// BLOG POST:
+
+const blogPostSchema = new mongoose.Schema(
+  {
+    //? _id gerek yok otomotik oluşturulur.
+    blogCategoryId: {
+      type: mongoose.Schema.Types.ObjectId, // ForeignKey, RelationalID
+      ref: "BlogCategory", // BlogCategory Modelinden bir referans alır.ismi aynı olmalı
+      required: true,
+    },
+
+    title: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    content: {
+      type: String,
+      trim: true,
+      required: true,
+    },
+    published: {
+        type: Boolean,
+        default: true
+    }
+    // createdAt, // otomatik oluşturulur
+    //  updatedAt, // otomatik oluşturulur
+  },
+  {
+    collection: "blogPost",
+    timestamps: true,
+  }
+);
+
+//? model mongoose.model("model adı", hangi şema)
 //   const BlogPostModel =  mongoose.model("BlogPost", blogPostSchema)
 //   module.exports={
 //     BlogPost: BlogPostModel
 //   }
 
-  module.exports={
-    BlogPost: mongoose.model("BlogPost", blogPostSchema),
-  }
-
-
-
-
-
-
-
+module.exports = {
+  BlogCategory: mongoose.model("BlogCategory", blogCategorySchema),
+  BlogPost: mongoose.model("BlogPost", blogPostSchema),
+};
 
 // const nameSchema = new mongoose.Schema({fields},{tablo adı})
 /*
@@ -73,4 +94,3 @@ const blogSchema = new mongoose.Schema(
         timestamps: true, // olusturma ve güncelleme zamanı    
     })
     */
-
