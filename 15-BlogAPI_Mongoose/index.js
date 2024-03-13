@@ -29,3 +29,4 @@ app.listen(PORT, () =>
 );
 
 // require("./src/sync")(); // category id yi eski kayıtlara eklemek için çalıştırıldı
+// bir kez çalıştırıldı
