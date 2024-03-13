@@ -18,7 +18,40 @@ const HOST = process.env.HOST || "127.0.0.1";
 //* db connection process.env yi görmesi için bu satırda kullandık
 require("./src/configs/dbConnection");
 
-app.all("/", (req, res) => res.send("Welcome to blog api with mongoose"));
+
+/* ------------------------------------------------------- */
+// SessionCookies:
+// http://expressjs.com/en/resources/middleware/cookie-session.html
+// https://www.npmjs.com/package/cookie-session
+//* $ npm i cookie-session
+
+const session = require("cookie-session");
+app.use(session({ 
+  secret: process.env.SECRET_KEY, // şifreleme anahtarı
+  // maxAge: 1000 *60 * 60 * 24 * 7 ,         // sifreleme suresi// session olmaz süre verdik.
+   }));
+
+/* ------------------------------------------------------- */
+
+app.use(require("./src/middlewares/user.Control"));
+
+
+
+/* ------------------------------------------------------- */
+
+
+app.all("/", (req, res) => res.send(
+  
+  // "Welcome to blog api with mongoose"
+  {
+    error: false,
+    message: "Welcome to blog api with mongoose",
+    session: req.session
+  }
+  
+  
+  
+  ));
 app.use("/user", require("./src/routes/user.router"));
 app.use("/blog", require("./src/routes/blog.router"));
 
