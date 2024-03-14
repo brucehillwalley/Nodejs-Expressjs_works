@@ -35,6 +35,9 @@ app.use(session({
 
 app.use(require("./src/middlewares/user.Control"));
 
+//filtering, searching, sorting, pagination
+app.use(require("./src/middlewares/findSearchSortPage"));
+
 
 
 /* ------------------------------------------------------- */

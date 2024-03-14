@@ -18,9 +18,13 @@ const { BlogCategory } = require("../models/blog.model");
 
 module.exports.BlogCategory = {
   list: async (req, res) => {
-    const data = await BlogCategory.find();
+    // const data = await BlogCategory.find();
+    const data = await res.getModelList(BlogCategory);
+
+   
     res.status(200).send({
       error: false,
+      details: await res.getModelListDetails(BlogCategory),
       data: data,
     });
   },
@@ -63,7 +67,7 @@ module.exports.BlogCategory = {
 
 module.exports.BlogPost = {
   list: async (req, res) => {
-    /* FILTERING & SEARCHING & SORTING & PAGINATION */
+    /* FILTERING & SEARCHING & SORTING & PAGINATION 
 
     // FILTERING:
     // URL?filter[key1]=value1&filter[key2]=value2
@@ -111,12 +115,15 @@ module.exports.BlogPost = {
 
     // const data = await BlogPost.find({ published: true })
     // const data = await BlogPost.find(filter)
-    const data = await BlogPost.find({ ...filter, ...search })
-      .sort(sort).skip(skip)
-      .limit(limit);
+    // const data = await BlogPost.find({ ...filter, ...search })
+    //   .sort(sort).skip(skip)
+    //   .limit(limit);
+
+    const data = await res.getModelList(BlogPost, 'blogCategoryId');
 
     res.status(200).send({
       error: false,
+      details: await res.getModelListDetails(BlogPost),
       data: data,
     });
   },
@@ -124,12 +131,13 @@ module.exports.BlogPost = {
     const data = await BlogPost.create(req.body);
     res.status(201).send({
       error: false,
+     
       body: req.body,
       data: data,
     });
   },
   read: async (req, res) => {
-    const data = await BlogPost.find({ _id: req.params.postId });
+    const data = await BlogPost.findOne({ _id: req.params.postId }).populate('blogCategoryId');
     res.status(202).send({
       error: false,
       data: data,
