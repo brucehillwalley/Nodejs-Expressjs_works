@@ -1,147 +1,155 @@
-"use strict"
+"use strict";
 /* ====================================================== */
 /*                     BLOG API CONTROLLERS               */
 /* ====================================================== */
 
-require("express-async-errors")
+require("express-async-errors");
 
-const { BlogPost}=require("../models/blog.model")
-const { BlogCategory}=require("../models/blog.model")
+const { BlogPost } = require("../models/blog.model");
+const { BlogCategory } = require("../models/blog.model");
 
 // module.exports={
 //     "key":"value",
 //     "key2":"value",
-    
+
 // }
 // module.exports.key:"value"
 // module.exports.key2:"value"
 
-module.exports.BlogCategory={
+module.exports.BlogCategory = {
+  list: async (req, res) => {
+    const data = await BlogCategory.find();
+    res.status(200).send({
+      error: false,
+      data: data,
+    });
+  },
+  create: async (req, res) => {
+    const data = await BlogCategory.create(req.body);
+    res.status(201).send({
+      error: false,
+      body: req.body,
+      data: data,
+    });
+  },
+  read: async (req, res) => {
+    const data = await BlogCategory.find({ _id: req.params.categoryId });
+    res.status(202).send({
+      error: false,
+      data: data,
+    });
+  },
+  update: async (req, res) => {
+    const data = await BlogCategory.updateOne(
+      { _id: req.params.categoryId },
+      req.body
+    );
+    const newdata = await BlogCategory.find({ _id: req.params.categoryId });
+    res.status(202).send({
+      error: false,
+      body: req.body,
+      data: data, // info about update
+      // güncel veriyi istiyorsan tekrar çağır
+      newdata: newdata,
+    });
+  },
+  delete: async (req, res) => {
+    const data = await BlogCategory.deleteOne({ _id: req.params.categoryId });
+    console.log(data);
+    res.sendStatus(data.deletedCount >= 1 ? 204 : 404);
+    //? en az 1 kayıt silindi ise 204, silinecek kayıt yoksa 404
+  },
+};
 
-    list: async(req,res)=>{
-        const data=await BlogCategory.find()
-        res.status(200).send({
-            error:false,
-            data:data
+module.exports.BlogPost = {
+  list: async (req, res) => {
+    /* FILTERING & SEARCHING & SORTING & PAGINATION */
 
-        })
+    // FILTERING:
+    // URL?filter[key1]=value1&filter[key2]=value2
+    const filter = req.query?.filter || {};
+    // console.log(filter)
 
-    },
-    create: async(req,res)=>{
-        
-
-        const data=await BlogCategory.create(req.body)
-        res.status(201).send({
-            error:false,
-            body:req.body,
-            data:data
-
-        })
-
-    },
-    read: async(req,res)=>{
-        const data=await BlogCategory.find({_id:req.params.categoryId})
-        res.status(202).send({
-            error:false,
-            data:data 
-
-        })
-
-    },
-    update: async(req,res)=>{
-        const data=await BlogCategory.updateOne({_id:req.params.categoryId},req.body)
-        const newdata=await BlogCategory.find({_id:req.params.categoryId})
-        res.status(202).send({
-            error:false,
-            body:req.body,
-            data:data, // info about update
-            // güncel veriyi istiyorsan tekrar çağır
-            newdata:newdata
-
-        })
-
-    },
-    delete: async(req,res)=>{
-        const data=await BlogCategory.deleteOne({_id:req.params.categoryId})
-        console.log(data);
-        res.sendStatus((data.deletedCount>=1)? 204:404)
-        //? en az 1 kayıt silindi ise 204, silinecek kayıt yoksa 404
-        
+    // SEARCHING:
+    // URL?search[key1]=value1&search[key2]=value2
+    // https://www.mongodb.com/docs/manual/reference/operator/query/regex/
+    const search = req.query?.search || {};
+    console.log(search);
+    //? { title: 'test', content: 'test' } -> { title: { $regex: 'test' }, content: { $regex: 'test' } }
+    for (let key in search) {
+      search[key] = { $regex: search[key], $options: "i" }; // i:insensitive
     }
-}
+    // console.log(search)
 
-module.exports.BlogPost={
+    // SORTING:
+    // URL?sort[key1]=asc&sort[key2]=desc
+    // asc: A-Z - desc: Z-A
 
-       list: async(req,res)=>{
+    const sort = req.query?.sort || {};
+    // console.log(sort)
 
- /* FILTERING & SEARCHING & SORTING & PAGINATION */
+    // PAGINATION:
 
-        // FILTERING:
-        // URL?filter[key1]=value1&filter[key2]=value2
-        const filter = req.query?.filter || {}
-        // console.log(filter)
+   // Limit:
+   let limit = Number(req.query?.limit)
+   limit = limit > 0 ? limit : Number(process.env.PAGE_SIZE || 20)
+   console.log('limit', limit)
 
-        // SEARCHING:
-        // URL?search[key1]=value1&search[key2]=value2
-        // https://www.mongodb.com/docs/manual/reference/operator/query/regex/
-        const search = req.query?.search || {}
-        console.log(search)
-        //? { title: 'test', content: 'test' } -> { title: { $regex: 'test' }, content: { $regex: 'test' } }
-        for (let key in search) {
-            search[key] = { $regex: search[key] }
-        }
-        console.log(search)
+   // Page:
+   let page = Number(req.query?.page)
+   // page = page > 0 ? page : 1
+   page = page > 0 ? (page - 1) : 0 // Backend 'de sayfa sayısı her zmaan page-1 olarak hesaplanmalı.
+   console.log('page', page)
 
-        /* FILTERING & SEARCHING & SORTING & PAGINATION */
+   // Skip:
+   // LIMIT 20, 10
+   let skip = Number(req.query?.skip)
+   skip = skip > 0 ? skip : (page * limit)
+   console.log('skip', skip)
 
-        // const data = await BlogPost.find({ published: true })
-        // const data = await BlogPost.find(filter)
-        const data = await BlogPost.find({ ...filter, ...search })
+    /* FILTERING & SEARCHING & SORTING & PAGINATION */
 
-        res.status(200).send({
-            error: false,
-            data: data
-        })
-    },
-    create: async(req,res)=>{
-        
+    // const data = await BlogPost.find({ published: true })
+    // const data = await BlogPost.find(filter)
+    const data = await BlogPost.find({ ...filter, ...search })
+      .sort(sort).skip(skip)
+      .limit(limit);
 
-        const data=await BlogPost.create(req.body)
-        res.status(201).send({
-            error:false,
-            body:req.body,
-            data:data
-
-        })
-
-    },
-    read: async(req,res)=>{
-        const data=await BlogPost.find({_id:req.params.postId})
-        res.status(202).send({
-            error:false,
-            data:data 
-
-        })
-
-    },
-    update: async(req,res)=>{
-        const data=await BlogPost.updateOne({_id:req.params.postId},req.body)
-        const newdata=await BlogPost.find({_id:req.params.postId})
-        res.status(202).send({
-            error:false,
-            body:req.body,
-            data:data, // info about update
-            // güncel veriyi istiyorsan tekrar çağır
-            newdata:newdata
-
-        })
-
-    },
-    delete: async(req,res)=>{
-        const data=await BlogPost.deleteOne({_id:req.params.postId})
-        console.log(data);
-        res.sendStatus((data.deletedCount>=1)? 204:404)
-        //? en az 1 kayıt silindi ise 204, silinecek kayıt yoksa 404
-        
-    }
-}
+    res.status(200).send({
+      error: false,
+      data: data,
+    });
+  },
+  create: async (req, res) => {
+    const data = await BlogPost.create(req.body);
+    res.status(201).send({
+      error: false,
+      body: req.body,
+      data: data,
+    });
+  },
+  read: async (req, res) => {
+    const data = await BlogPost.find({ _id: req.params.postId });
+    res.status(202).send({
+      error: false,
+      data: data,
+    });
+  },
+  update: async (req, res) => {
+    const data = await BlogPost.updateOne({ _id: req.params.postId }, req.body);
+    const newdata = await BlogPost.find({ _id: req.params.postId });
+    res.status(202).send({
+      error: false,
+      body: req.body,
+      data: data, // info about update
+      // güncel veriyi istiyorsan tekrar çağır
+      newdata: newdata,
+    });
+  },
+  delete: async (req, res) => {
+    const data = await BlogPost.deleteOne({ _id: req.params.postId });
+    console.log(data);
+    res.sendStatus(data.deletedCount >= 1 ? 204 : 404);
+    //? en az 1 kayıt silindi ise 204, silinecek kayıt yoksa 404
+  },
+};
