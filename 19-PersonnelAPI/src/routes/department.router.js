@@ -9,7 +9,7 @@ const Department  = require('../controllers/department.controller')
 router.route('/').get(Department.list).post(Department.create)
 
 // URL: /departments/:id
-router.route('/:id').get(Department.get).put(Department.update).patch(Department.update).delete(Department.delete)
+router.route('/:id').get(Department.read).put(Department.update).patch(Department.update).delete(Department.delete)
 
 
 /* ------------------------------------------------------- */
