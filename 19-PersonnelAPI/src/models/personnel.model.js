@@ -81,7 +81,7 @@ const PersonnelSchema = new mongoose.Schema(
 
     },
     {
-        collation: "personnels",
+        collection: "personnels",
         timestamps: true
     }
 )
