@@ -1,45 +1,38 @@
 "use strict";
-/*-------------------------------------------------------
+/* -------------------------------------------------------
     EXPRESS - Personnel API
--------------------------------------------------------*/
-
-const { mongoose } = require("../configs/dbConnection");
-// bu şekilde çağırmanın sebebi modülü tekrar tekrar çağırmamak. Bu yöntem  sağlıklı olan 
-/*-------------------------------------------------------*
+------------------------------------------------------- */
+const { mongoose } = require('../configs/dbConnection')
+/* ------------------------------------------------------- *
 {
     "userId": "65343222b67e9681f937f001",
     "token": "...tokenKey..."
 }
-/*-------------------------------------------------------*/
+/* ------------------------------------------------------- */
 // Token Model:
 
-const TokenSchema = new mongoose.Schema(
-    {
-        userId: {
-            type:mongoose.Schema.Types.ObjectId,
-            ref: 'Personnel',
-            required: true,
-            unique: true,
-            index: true,
-            // index true olduğunda daha hızlı erişim saglayacaktır.veri tabanı ilk oluşturılduğunda yapılmalıdır.
+const TokenSchema = new mongoose.Schema({
 
-        },
-
-        token: {
-            type: String,
-            trim: true,
-            required: true,
-            unique: true,
-            index: true,
-            // sürekli token sorgulayacağımız için index true verilir.
-
-
-        }
-
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Personnel', // 'User'
+        required: true,
+        index: true,
+        unique: true,
     },
-    {
-        collection: "tokens",
-        timestamps: true
-    })
 
-    module.exports = mongoose.model('Token', TokenSchema)
+    token: {
+        type: String,
+        trim: true,
+        required: true,
+        index: true,
+        unique: true,
+    },
+
+}, {
+    collection: 'tokens',
+    timestamps: true
+})
+
+/* ------------------------------------------------------- */
+module.exports = mongoose.model('Token', TokenSchema)
