@@ -49,6 +49,11 @@ module.exports = {
 
     update: async (req, res) => {
 
+        if(!req.user.isAdmin){
+            req.body.isAdmin = false
+            delete req.body.isLead
+            delete req.body.salary
+        }
         // isLead Control:
         const isLead = req.body?.isLead || false
         if (isLead) {
@@ -56,10 +61,6 @@ module.exports = {
             await Personnel.updateMany({ departmentId, isLead: true }, { isLead: false })
         }
 
-        if(!req.user.isAdmin){
-            req.body.isAdmin = false
-            delete req.body.salary
-        }
 
         const data = await Personnel.updateOne({ _id: req.params.id }, req.body, { runValidators: true })
 
