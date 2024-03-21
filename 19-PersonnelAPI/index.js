@@ -63,8 +63,29 @@ dbConnection()
 // }))
 // console.log(typeof today, today)
 
+/* ------------------------------------------------------- */
+//* DOCUMENTATION:
+// $ npm i swagger-autogen
+// $ npm i swagger-ui-express
+// $ npm i redoc-express
+
+//? JSON:
+const swaggerJson = require('./swagger.json')
+app.use('/documents/json', express.static('./swagger.json'))
 
 
+
+//? SWAGGER:
+const swaggerUi = require('swagger-ui-express')
+
+app.use('/documents/swagger', swaggerUi.serve, swaggerUi.setup(swaggerJson, { swaggerOptions: { persistAuthorization: true } }))
+
+//? REDOC:
+const redoc = require('redoc-express')
+app.use('/documents/redoc', redoc({
+    title: 'PersonnelAPI',
+    specUrl: '/documents/json'
+}))
 
 
 
