@@ -68,7 +68,7 @@
           "Authentication"
         ],
         "summary": "Logout",
-        "description": "Delete token",
+        "description": "Delete Token",
         "responses": {
           "200": {
             "description": "OK"
@@ -78,6 +78,9 @@
     },
     "/personnels/": {
       "get": {
+        "tags": [
+          "Personnels"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -86,6 +89,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Personnels"
+        ],
         "description": "",
         "parameters": [
           {
@@ -110,6 +116,9 @@
     },
     "/personnels/{id}": {
       "get": {
+        "tags": [
+          "Personnels"
+        ],
         "description": "",
         "parameters": [
           {
@@ -126,6 +135,9 @@
         }
       },
       "put": {
+        "tags": [
+          "Personnels"
+        ],
         "description": "",
         "parameters": [
           {
@@ -160,6 +172,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Personnels"
+        ],
         "description": "",
         "parameters": [
           {
@@ -179,6 +194,9 @@
         }
       },
       "patch": {
+        "tags": [
+          "Personnels"
+        ],
         "description": "",
         "parameters": [
           {
@@ -219,7 +237,7 @@
           "Departments"
         ],
         "summary": "List Departments",
-        "description": "  You can send query with endpoint for search[], sort[], page and limit.  <ul> Examples:   <li>URL/?<b>search[field1]=value1&search[field2]=value2</b></li>   <li>URL/?<b>sort[field1]=1&sort[field2]=-1</b></li>   <li>URL/?<b>page=2&limit=1</b></li>  </ul>  ",
+        "description": "  You can send query with endpoint for search[], sort[], page and limit.  <ul> Examples:  <li>URL/?<b>search[field1]=value1&search[field2]=value2</b></li>  <li>URL/?<b>sort[field1]=1&sort[field2]=-1</b></li>  <li>URL/?<b>page=2&limit=1</b></li>  </ul>  ",
         "responses": {
           "200": {
             "description": "OK"
@@ -684,7 +702,7 @@
             },
             "default": {
               "type": "number",
-              "example": 1711056060110
+              "example": 1711222937227
             }
           }
         }
