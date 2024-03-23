@@ -139,7 +139,7 @@ app.all('/', (req, res) => {
         user: req.user,
         api: {
             documents: {
-                swagger: 'http://127.0.0.1:3000/documents/swagger',
+                swagger: 'https://nodejs-expressjs-works.onrender.com/documents/swagger',
                 redoc: 'http://127.0.0.1:3000/documents/redoc',
                 json: 'http://127.0.0.1:3000/documents/json',
             },
