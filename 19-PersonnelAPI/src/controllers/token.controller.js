@@ -8,7 +8,6 @@ const Token = require("../models/token.model");
 module.exports = {
 
     list: async (req, res) => {
-       
         /*
             _swagger.deprecated = true
             #swagger.ignore = true
@@ -24,7 +23,6 @@ module.exports = {
     },
 
     create: async (req, res) => {
-
         /*
             _swagger.deprecated = true
             #swagger.ignore = true
@@ -39,7 +37,6 @@ module.exports = {
     },
 
     read: async (req, res) => {
-
         /*
             _swagger.deprecated = true
             #swagger.ignore = true
@@ -54,7 +51,6 @@ module.exports = {
     },
 
     update: async (req, res) => {
-
         /*
             _swagger.deprecated = true
             #swagger.ignore = true
@@ -70,7 +66,6 @@ module.exports = {
     },
 
     delete: async (req, res) => {
-
         /*
             _swagger.deprecated = true
             #swagger.ignore = true

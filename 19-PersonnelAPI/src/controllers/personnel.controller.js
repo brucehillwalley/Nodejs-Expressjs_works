@@ -8,6 +8,9 @@ const Personnel = require('../models/personnel.model')
 module.exports = {
 
     list: async (req, res) => {
+        /*
+            #swagger.tags = ["Personnels"]
+        */
 
         const data = await res.getModelList(Personnel, {}, 'departmentId')
 
@@ -20,6 +23,9 @@ module.exports = {
     },
 
     create: async (req, res) => {
+        /*
+            #swagger.tags = ["Personnels"]
+        */
 
         // isLead Control:
         const isLead = req.body?.isLead || false
@@ -37,6 +43,9 @@ module.exports = {
     },
 
     read: async (req, res) => {
+        /*
+            #swagger.tags = ["Personnels"]
+        */
 
         const data = await Personnel.findOne({ _id: req.params.id })
 
@@ -48,19 +57,22 @@ module.exports = {
     },
 
     update: async (req, res) => {
+        /*
+            #swagger.tags = ["Personnels"]
+        */
 
-        if(!req.user.isAdmin){
+        if (!req.user.isAdmin) {
             req.body.isAdmin = false
             delete req.body.isLead
             delete req.body.salary
         }
+
         // isLead Control:
         const isLead = req.body?.isLead || false
         if (isLead) {
             const { departmentId } = await Personnel.findOne({ _id: req.params.id }, { departmentId: 1 })
             await Personnel.updateMany({ departmentId, isLead: true }, { isLead: false })
         }
-
 
         const data = await Personnel.updateOne({ _id: req.params.id }, req.body, { runValidators: true })
 
@@ -72,6 +84,9 @@ module.exports = {
     },
 
     delete: async (req, res) => {
+        /*
+            #swagger.tags = ["Personnels"]
+        */
 
         const data = await Personnel.deleteOne({ _id: req.params.id })
 

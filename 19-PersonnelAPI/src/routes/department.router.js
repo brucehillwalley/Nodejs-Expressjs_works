@@ -15,10 +15,10 @@ router.route('/')
     .post(permissions.isAdmin, department.create)
 
 router.route('/:id')
-    .get(permissions.isLogin,department.read)
-    .put(permissions.isAdmin,department.update)
-    .patch(department.update)
-    .delete(permissions.isAdmin,department.delete)
+    .get(permissions.isLogin, department.read)
+    .put(permissions.isAdmin, department.update)
+    .patch(permissions.isAdmin, department.update)
+    .delete(permissions.isAdmin, department.delete)
 
 router.get('/:id/personnels', permissions.isAdminOrLead, department.personnels)
 

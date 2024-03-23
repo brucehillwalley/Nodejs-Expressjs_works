@@ -1,12 +1,12 @@
 "use strict"
-/*-------------------------------------------------------
+/* -------------------------------------------------------
     EXPRESS - Personnel API
 ------------------------------------------------------- */
+// app.use(authentication):
 
 const Token = require('../models/token.model')
 
-module.exports= async (req, res, next) => {
-
+module.exports = async (req, res, next) => {
 
     // Authorization: Token ...
     // Authorization: ApiKey ...
@@ -14,17 +14,15 @@ module.exports= async (req, res, next) => {
     // Authorization: x-auth-token ...
     // Authorization: Bearer ...
 
-    const auth = req.headers?.authorization || null //Token...tokenKey...
+    const auth = req.headers?.authorization || null // Token ...tokenKey...
+    const tokenKey = auth ? auth.split(' ') : null // ['Token', '...tokenKey...']
 
-    const tokenKey = auth ? auth.split(' ') : null // ['Token', 'tokenKey']
+    if (tokenKey && tokenKey[0]=='Token') {
 
-    if(tokenKey && tokenKey[0] === 'Token'){
-        const tokenData = await Token.findOne({token: tokenKey[1]}).populate('userId')
-        if (tokenData)
-         req.user = tokenData.userId
-
-         console.log(req.user);
-        
+        const tokenData = await Token.findOne({ token: tokenKey[1] }).populate('userId')
+        // console.log(tokenData)
+        if (tokenData) req.user = tokenData.userId // Personnel Data
+        // console.log(req.user)
     }
 
     next()

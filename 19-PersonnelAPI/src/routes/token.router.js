@@ -11,18 +11,18 @@ const token = require('../controllers/token.controller')
 // URL: /tokens
 
 // router.route('/')
-//     .get(permissions.isAdmin,token.list)
-//     .post(permissions.isAdmin,token.create)
+//     .get(permissions.isAdmin, token.list)
+//     .post(permissions.isAdmin, token.create)
 
 // router.route('/:id')
-//     .get(permissions.isAdmin,token.read)
-//     .put(permissions.isAdmin,token.update)
-//     .patch(permissions.isAdmin,token.update)
-//     .delete(permissions.isAdmin,token.delete)
+//     .get(permissions.isAdmin, token.read)
+//     .put(permissions.isAdmin, token.update)
+//     .patch(permissions.isAdmin, token.update)
+//     .delete(permissions.isAdmin, token.delete)
 
+const { isAdmin } = require('../middlewares/permissions')
 
 // router.use(permissions.isAdmin)
-const {isAdmin}=require('../middlewares/permissions')
 router.use(isAdmin)
 
 router.route('/')
