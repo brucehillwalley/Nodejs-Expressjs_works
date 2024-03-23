@@ -96,7 +96,7 @@ app.use('/documents/redoc', redoc({
 app.use(express.json())
 
 // logging:
-app.use(require('./src/middlewares/logging'))
+// app.use(require('./src/middlewares/logging'))
 
 // SessionsCookies:
 app.use(require('cookie-session')({ secret: process.env.SECRET_KEY }))
