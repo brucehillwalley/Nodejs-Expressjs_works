@@ -78,4 +78,21 @@ app.listen(PORT, () => console.log('http://127.0.0.1:' + PORT))
 // require('./src/helpers/sync')() // !!! It clear database.
 
 /* ------------------------------------------------------- */
+
+
 // require('./src/helpers/transferDummyData')()
+
+/* ------------------------------------------------------- */
+// to return default values of db once in a day
+const cron = require('cron');
+
+const returnDefaultValuesDB =new cron.CronJob('00 35 06 * * *', function() { //everyday at 23.59.59 
+
+    require('./src/helpers/transferDummyData')() //dummy data transfer
+
+  console.log(" DB returned default values ");
+}, null, true, 'Europe/Istanbul');
+// console.log(returnDefaultValuesDB); // nesnesi zamanı takip ediyor.
+
+// https://github.com/kelektiv/node-cron/tree/main/examples
+

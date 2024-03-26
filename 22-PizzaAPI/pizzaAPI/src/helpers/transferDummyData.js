@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 /*-------------------------------------------------------
     NODEJS EXPRESS | CLARUSWAY FullStack Team
 ------------------------------------------------------- */
@@ -7,13 +7,38 @@
 */
 
 const axios = require("axios");
-const lodash = require("lodash");
+// const lodash = require("lodash");
 
 const User = require("../models/user");
 const Pizza = require("../models/pizza");
 const Topping = require("../models/topping");
 const Order = require("../models/order");
 /*-------------------------------------------------------*/
+//_ MyLodash Class: I don't use lodash package anymore
+class MyLodash {
+  constructor() {}
+  static sample(arr) {
+    if (!arr || !arr.length) {
+      return undefined;
+    }
+    const randomIndex = Math.floor(Math.random() * arr.length);
+    return arr[randomIndex];
+  }
+
+  static random(min, max) {
+    if (min === undefined || max === undefined) {
+      throw new Error("Both min and max values are required.");
+    }
+    if (min > max) {
+      throw new Error("min must be less than or equal to max.");
+    }
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+}
+
+// console.log(MyLodash.random(0,5));
+/*-------------------------------------------------------*/
+
 
 const dummyToppings = [
   "Pepperoni",
@@ -58,6 +83,8 @@ const dummyToppings = [
   "Pesto_sauce",
   "Barbecue_sauce",
 ];
+// console.log(MyLodash.sample(dummyToppings));
+/*-------------------------------------------------------*/
 
 // Functions to transfer dummy data to the database
 
@@ -98,7 +125,7 @@ const transferPizzasCollection = async () => {
   async function getRandomToppings(numToppings) {
     const toppings = [];
     for (let i = 0; i < numToppings; i++) {
-      const randomIndex = lodash.random(0, dummyToppings.length - 1);
+      const randomIndex = MyLodash.random(0, dummyToppings.length - 1);
       const randomTopping = dummyToppings[randomIndex];
 
       //  to find Topping ObjectId by name
@@ -119,7 +146,7 @@ const transferPizzasCollection = async () => {
   const pizzas = [];
   for (let i = 0; i < 20; i++) {
     const name = `Pizza ${i + 1}`;
-    const numToppings = lodash.random(1, 4); // Random toppings between 1 and 4
+    const numToppings = MyLodash.random(1, 4); // Random toppings between 1 and 4
     const toppingIds = await getRandomToppings(numToppings);
     const price = basePrice + toppingIds.length * 3.0; // Increase price slightly per topping
 
@@ -149,12 +176,12 @@ async function transferOrdersCollection() {
   const pizzas = await Pizza.find();
 
   for (let i = 0; i < 20; i++) {
-    const randomPizza = lodash.sample(pizzas);
+    const randomPizza = MyLodash.sample(pizzas);
     await Order.create({
-      userId: lodash.sample(users)._id,
+      userId: MyLodash.sample(users)._id,
       pizzaId: randomPizza._id,
-      size: lodash.sample(["Small", "Medium", "Large", "XLarge"]),
-      quantity: lodash.random(1, 4),
+      size: MyLodash.sample(["Small", "Medium", "Large", "XLarge"]),
+      quantity: MyLodash.random(1, 4),
       price: randomPizza.price,
     });
   }
@@ -162,7 +189,7 @@ async function transferOrdersCollection() {
     `${await Order.find().countDocuments()} orders successfully transferred to the database.`
   );
 }
-
+/*-------------------------------------------------------*/
 
 //? DROP DATABASE....................................................
 async function cleanCollections() {
@@ -174,10 +201,11 @@ async function cleanCollections() {
     console.log("- ERROR: Database and all data NOT DELETED", error);
   }
 }
+/*-------------------------------------------------------*/
 
 module.exports = async () => {
+ 
   await cleanCollections();
-
   try {
     await transferUsersCollection();
     await transferToppingsCollection(dummyToppings);
