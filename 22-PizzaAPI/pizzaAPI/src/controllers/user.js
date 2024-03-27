@@ -1,15 +1,14 @@
-"use strict"
+"use strict";
 /* -------------------------------------------------------
     NODEJS EXPRESS | CLARUSWAY FullStack Team
 ------------------------------------------------------- */
 // User Controller:
 
-const User = require('../models/user')
+const User = require("../models/user");
 
 module.exports = {
-
-    list: async (req, res) => {
-        /*
+  list: async (req, res) => {
+    /*
             #swagger.tags = ["Users"]
             #swagger.summary = "List Users"
             #swagger.description = `
@@ -23,71 +22,87 @@ module.exports = {
             `
         */
 
-        const data = await res.getModelList(User)
+    const data = await res.getModelList(User);
 
-        res.status(200).send({
-            error: false,
-            details: await res.getModelListDetails(User),
-            data
-        })
-    },
+    res.status(200).send({
+      error: false,
+      details: await res.getModelListDetails(User),
+      data,
+    });
+  },
 
-    // CRUD:
+  // CRUD:
 
-    create: async (req, res) => {
-        /*
+  create: async (req, res) => {
+    /*
             #swagger.tags = ["Users"]
             #swagger.summary = "Create User"
         */
 
-        const data = await User.create(req.body)
+    const data = await User.create(req.body);
 
-        res.status(201).send({
-            error: false,
-            data
-        })
-    },
+    res.status(201).send({
+      error: false,
+      data,
+    });
+  },
 
-    read: async (req, res) => {
-        /*
+  read: async (req, res) => {
+    /*
             #swagger.tags = ["Users"]
             #swagger.summary = "Get Single User"
         */
 
-        const data = await User.findOne({ _id: req.params.id })
+    // manage only self-record
+    let filter = {};
+    if (!req.user.isAdmin) {
+      //const data = await User.findOne({ _id: req.params.id, _id: req.user._id });
 
-        res.status(200).send({
-            error: false,
-            data
-        })
-    },
+      filter = { _id: req.user._id };
+    }
 
-    update: async (req, res) => {
-        /*
+    const data = await User.findOne({ _id: req.params.id, ...filter });
+
+    res.status(200).send({
+      error: false,
+      data,
+    });
+  },
+
+  update: async (req, res) => {
+    /*
             #swagger.tags = ["Users"]
             #swagger.summary = "Update User"
         */
+    let filter = {};
+    if (!req.user.isAdmin) {
+      //const data = await User.findOne({ _id: req.params.id, _id: req.user.id });
 
-        const data = await User.updateOne({ _id: req.params.id }, req.body, { runValidators: true })
+      filter = { _id: req.user._id };
+    }
 
-        res.status(202).send({
-            error: false,
-            data,
-            new: await User.findOne({ _id: req.params.id })
-        })
-    },
+    const data = await User.updateOne({ _id: req.params.id, ...filter }, req.body, {
+      runValidators: true,
+    });
 
-    delete: async (req, res) => {
-        /*
+    res.status(202).send({
+      error: false,
+      data,
+      new: await User.findOne({ _id: req.params.id }),
+    });
+  },
+
+  delete: async (req, res) => {
+    /*
             #swagger.tags = ["Users"]
             #swagger.summary = "Delete User"
         */
 
-        const data = await User.deleteOne({ _id: req.params.id })
+    const data = await User.deleteOne({ _id: req.params.id });
 
-        res.status(data.deletedCount ? 204 : 404).send({
-            error: !data.deletedCount,
-            data
-        })
-    }
-}
+    res.status(data.deletedCount ? 204 : 404).send({
+      error: !data.deletedCount,
+      data,
+    });
+  },
+};
