@@ -5,6 +5,7 @@
 // User Controller:
 
 const User = require('../models/user')
+const sendMail = require('../helpers/sendMail')
 
 module.exports = {
 
@@ -41,6 +42,17 @@ module.exports = {
         */
 
         const data = await User.create(req.body)
+
+        // ÜYE OLUNCA MAİL GÖNDERECEK
+        sendMail(
+            data.email,  // to:
+            'Welcome to pizzaApi services.',  // subject
+            // message
+            `
+            <h1>Welcome ${data.username}</h1>
+            <p>Welcome to our API system.</p>
+            `
+        )
 
         res.status(201).send({
             error: false,

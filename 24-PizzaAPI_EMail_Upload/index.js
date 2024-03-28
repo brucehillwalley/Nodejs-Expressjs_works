@@ -38,6 +38,9 @@ dbConnection()
 // Accept JSON:
 app.use(express.json())
 
+// Accept URL-encoded:
+app.use(express.urlencoded({ extended: true }))
+
 // Logger:
 app.use(require('./src/middlewares/logger'))
 
@@ -53,7 +56,7 @@ app.use(require('./src/middlewares/queryHandler'))
 // https://www.npmjs.com/package/nodemailer
 // https://ethereal.email/
 
-const nodemailer = require('nodemailer')
+// const nodemailer = require('nodemailer')
 
 // Create TEst account:
 // nodemailer.createTestAccount().then((account) => {
@@ -111,13 +114,13 @@ const nodemailer = require('nodemailer')
 //* gmail
 //* Google -> AccountHome -> Security -> Two-Step-Verify -> App-Passwords
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.GMAILSERVICE_USER,
-        pass: process.env.GMAILSERVICE_KEY
-    }
-})
+// const transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     auth: {
+//         user: process.env.GMAILSERVICE_USER,
+//         pass: process.env.GMAILSERVICE_KEY
+//     }
+// })
 
 // transporter.sendMail({
 //     from: 'brucehillwalley@gmail.com',
