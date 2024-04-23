@@ -1,0 +1,20 @@
+FROM node:21-alpine3.18
+
+WORKDIR /frontend
+
+# birinci nokta source ikinci nokta destination
+COPY . .
+# buraya kadar image oluşturmayla ile ilgili
+
+# container açıldığı zaman sırayla çalışacaklar:
+RUN npm install -g pnpm
+RUN pnpm install
+
+# docker oluştuktan sonra
+# CMD npm start
+CMD ["npm", "start"] 
+# bazı projelerde hata oluşma ihtimaline karsi $CMD npm start yerine $CMD ["npm", "start"] yazılır
+
+#optinal
+EXPOSE 5173
+# hangi porttan dinlecegini belirlenebilir.

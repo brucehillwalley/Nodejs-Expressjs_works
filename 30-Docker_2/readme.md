@@ -1,5 +1,5 @@
 
-## backend
+## backend (aşağıdaki komutları container da da çalıştırabiliriz burada projenin çalıştığını görmek için bu komutları çalıştırdık)
 *   npm i
 *   mkdir logs
 *   create .env
@@ -9,7 +9,29 @@
 # container oluştur
 *   docker run --name backend -p 7000:8000 backend 
 *   7000:8000 yazılmayabilir yukarıda 7000 dış port 8000 iç yani server port (container çalıştığında => http://127.0.0.1:7000)
-  
+# terminali meşgul etmesin arkaplanda çalışsın istiyorsak
+*   docker run -d -p 7000:8000 --name backend backend
+# terminalden container ı başlatmak ve durdurmak için:
+*   docker start backend
+*   docker stop backend
+# docker hub için
+*   docker tag backend brucehillwalley/backend_stock
+*   docker push brucehillwalley/backend_stock
+
+## frontend
+*  create dockerfile
+*  docker build ./frontend -t frontend
+*  docker run -d -p 5173:5173 --name frontend frontend 
+# docker hub için
+*  docker tag frontend brucehillwalley/frontend_stock
+*   docker push brucehillwalley/frontend_stock
+
+##  Docker Compose:
+    Çok konteynerli Docker uygulamalarını tanımlama ve yönetme.
+    Tüm uygulama hizmetlerini bir komutla başlatma ve durdurma.
+    Geliştirme, test ve üretim ortamlarında uygulamaların tutarlı ve kolay bir şekilde dağıtımını sağlama.
+    Ortamlar arasında tutarlılık ve izlenebilirlik sunma gibi avantajlar sağlar.
+
 ## Server Systems
 
 * Physical Servers (BareMetal Servers):
