@@ -1,0 +1,22 @@
+FROM node:21-alpine3.18
+
+WORKDIR /backend
+
+# birinci nokta source ikinci nokta destination
+COPY . .
+# buraya kadar image oluşturmayla ile ilgili
+
+# container açıldığı zaman sırayla çalışacaklar:
+# RUN mkdir logs 
+RUN mkdir -p logs
+RUN mkdir -p upload
+RUN npm install
+
+# docker oluştuktan sonra
+# CMD npm start
+CMD ["npm", "start"] 
+# bazı projelerde hata oluşma ihtimaline karsi $CMD npm start yerine $CMD ["npm", "start"] yazılır
+
+#optinal
+EXPOSE 8000
+# hangi porttan dinlecegini belirlenebilir.

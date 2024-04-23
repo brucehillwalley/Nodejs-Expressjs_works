@@ -1,3 +1,15 @@
+
+## backend
+*   npm i
+*   mkdir logs
+*   create .env
+*   create .dockerignore
+# image oluştur
+*   docker build ./backend -t backend
+# container oluştur
+*   docker run --name backend -p 7000:8000 backend 
+*   7000:8000 yazılmayabilir yukarıda 7000 dış port 8000 iç yani server port (container çalıştığında => http://127.0.0.1:7000)
+  
 ## Server Systems
 
 * Physical Servers (BareMetal Servers):
