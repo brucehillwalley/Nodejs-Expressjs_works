@@ -1,0 +1,29 @@
+"use strict";
+/* -------------------------------------------------------
+    EXPRESSJS - TODO Project with Sequelize
+------------------------------------------------------- */
+// ROUTERS:
+
+const todo = require('../controllers/todo.view.controller')
+
+const router = require('express').Router()
+
+//! TEMPLATE DE GEÇERLİ DEĞİL
+// router.route('/')
+//     .get(todo.list)
+//     .post(todo.create)
+
+// router.route('/:id')
+//     .get(todo.read)
+//     .put(todo.update)
+//     .patch(todo.update)
+//     .delete(todo.delete)
+
+router.get('/', todo.list)
+
+// router.get('/create', todo.create)
+// router.post('/create', todo.create)
+router.all('/create', todo.create)
+
+
+module.exports = router

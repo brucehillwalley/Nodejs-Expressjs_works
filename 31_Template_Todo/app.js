@@ -13,6 +13,9 @@ const PORT = process.env.PORT || 8000;
 // Accept json data and convert object:
 app.use(express.json())
 
+// Accept form-urlencoded:
+app.use(express.urlencoded({extended:true}))
+
 // Catch async-errors:
 require('express-async-errors')
 /* ------------------------------------------------------- */
@@ -23,13 +26,18 @@ require('express-async-errors')
 // https://github.com/mde/ejs/wiki/Using-EJS-with-Express
 
 // console.log(app);
+// Setting template engine:
 //?view engine i tanıttık
 app.set("view engine", "ejs");
+
+// default view folder: ./views/
+app.set("views", "./public");
 
 app.all('/',(req,res)=>{
     //API:
     // res.send({message:'hello'})
     // View Template:
+    // call ejs file in ./views/
     // res.render('index.ejs')
     res.render('index')
 })
@@ -38,7 +46,8 @@ app.all('/',(req,res)=>{
 /* ------------------------------------------------------- */
 // Routes:
 
-app.use(require('./app/routes/todo.router'))
+app.use('/api', require('./app/routes/todo.router'))
+app.use('/view', require('./app/routes/todo.view.router'))
 
 /* ------------------------------------------------------- */
 // ErrorHandler:
