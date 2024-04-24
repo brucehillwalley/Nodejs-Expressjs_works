@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Welcome to Homepage</h1>
+    <pre>
+        <!-- running JS code - no print -->
+        <% 
+        console.log('TEMPLATE EJS WORKS'); 
+        console.log('birden fazla kod satırı yazabiliriz');
+        %>
+        <!-- safe-print to html   -->
+        <%= '<p><b>TEMPLATE EJS WORKS</b></p>' %>
+        <%= 2+5 %>
+        <!-- direct print to html -->
+        <%- '<p><b>TEMPLATE EJS WORKS</b></p>' %>
+        <!-- comment no print -->
+        <%# comment %>
+        <!-- cancel template code -->
+        <%% no template code %>
+
+    </pre>
+</body>
+</html>
