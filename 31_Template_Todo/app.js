@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 8000;
 // Accept json data and convert object:
 app.use(express.json())
 
-// Accept form-urlencoded:
+//  Accept form-urlencoded and convert to object:
 app.use(express.urlencoded({extended:true}))
 
 // Catch async-errors:
@@ -27,7 +27,7 @@ require('express-async-errors')
 
 // console.log(app);
 // Setting template engine:
-//?view engine i tanıttık
+//?view engine e ejs tanıttık
 app.set("view engine", "ejs");
 
 // default view folder: ./views/
@@ -37,7 +37,7 @@ app.all('/',(req,res)=>{
     //API:
     // res.send({message:'hello'})
     // View Template:
-    // call ejs file in ./views/
+    // call ejs file in ./views/ //public yeni views klasörü
     // res.render('index.ejs')
     res.render('index')
 })

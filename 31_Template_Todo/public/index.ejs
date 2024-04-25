@@ -10,21 +10,22 @@
     <p><a href="/view">Template</a></p>
     <p><a href="/api">API</a></p>
     <pre>
-        <!-- running JS code - no print -->
-        <% 
-        console.log('TEMPLATE EJS WORKS'); 
-        console.log('birden fazla kod satırı yazabiliriz');
+        <!-- running JS - no print -->
+        <%
+            console.log('template running')
+            console.log('bla bla')
         %>
-        <!-- safe-print to html   -->
-        <%= '<p><b>TEMPLATE EJS WORKS</b></p>' %>
+        <!--  safe-print to html -->
+        <%= '<p><b>Text</b></p>' %> //kaynakta yani hmtl dosyasında tagları unicode olarak yazdırır
         <%= 2+5 %>
-        <!-- direct print to html -->
-        <%- '<p><b>TEMPLATE EJS WORKS</b></p>' %>
-        <!-- comment no print -->
-        <%# comment %>
+        <!--  direct-print to html -->
+        <%- '<p><b>Text</b></p>' %>
+        <!-- comment - no print -->
+        <%# commment %>
         <!-- cancel template code -->
-        <%% no template code %>
-
+        <%% no template %>
+        <!--  direct-print to html and remove newLine (\n) -->
+        <%- '<p><b>Text</b></p>' -%>
     </pre>
 </body>
 </html>

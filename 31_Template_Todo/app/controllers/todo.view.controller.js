@@ -16,7 +16,10 @@ module.exports = {
     list: async (req, res) => {
 
         // const data = await Todo.findAll()
-        const data = await Todo.findAndCountAll()
+        const data = await Todo.findAndCountAll({
+            // order: [['priority', 'ASC'], ['id', 'DESC']]
+            order: [['id', 'DESC']] // Id'ye göre ters sırala
+        })
         // console.log(data.rows);
 
         // res.status(200).send({
@@ -64,10 +67,12 @@ module.exports = {
         // const data = await Todo.findOne({ where: { id: req.params.id } })
         const data = await Todo.findByPk(req.params.id)
 
-        res.status(200).send({
-            error: false,
-            result: data
-        })
+        // res.status(200).send({
+        //     error: false,
+        //     result: data
+        // })
+        console.log(data);
+        res.render('todoRead', {todo:data.dataValues, priority:PRIORITY})
 
     },
 
@@ -76,13 +81,26 @@ module.exports = {
         // const data = await Todo.update({ ...newData }, { ...where })
         const data = await Todo.update(req.body, { where: { id: req.params.id } })
 
-        res.status(202).send({
-            error: false,
-            message: 'Updated',
-            body: req.body, // Gönderdiğim veriyi göster.
-            result: data,
-            new: await Todo.findByPk(req.params.id) // Güncellenmiş veriyi de göster.
-        })
+        // res.status(202).send({
+        //     error: false,
+        //     message: 'Updated',
+        //     body: req.body, // Gönderdiğim veriyi göster.
+        //     result: data,
+        //     new: await Todo.findByPk(req.params.id) // Güncellenmiş veriyi de göster.
+        // })
+
+
+        if (req.method == 'POST') {
+            // UPDATE:
+    
+                res.redirect('/view')
+    
+            } else {
+            // VIEW:
+            // Form View:
+                res.render('todoUpdate', { todo:dataValues, priority: PRIORITY })
+            }
+
     },
 
     delete: async (req, res) => {
