@@ -17,10 +17,14 @@ module.exports = {
 
         // const data = await Todo.findAll()
         const data = await Todo.findAndCountAll({
-            // order: [['priority', 'ASC'], ['id', 'DESC']]
-            order: [['id', 'DESC']] // Id'ye göre ters sırala en son kaydedilen ilk gösterilir
+            order: [['isDone', 'ASC'],['priority', 'DESC'], ['id', 'DESC'] ],
+            // order: [['id', 'DESC']] // Id'ye göre ters sırala en son kaydedilen ilk gösterilir
         })
-        console.log(data.rows);
+        
+        // const data = await Todo.findAndCountAll({
+        //     order: [['isDone', 'ASC']], // 'isDone' true olanlar önce, false olanlar sonra
+        //   });
+        // console.log(data.rows);
 
         // res.status(200).send({
         //     error: false,
