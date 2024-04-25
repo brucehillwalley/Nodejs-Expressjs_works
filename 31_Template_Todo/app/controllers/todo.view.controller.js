@@ -76,7 +76,7 @@ module.exports = {
         //     error: false,
         //     result: data
         // })
-        console.log(data);
+        // console.log(data);
         res.render('todoRead', {todo:data.dataValues, priority:PRIORITY})
 
     },
@@ -97,13 +97,15 @@ module.exports = {
 
         if (req.method == 'POST') {
             // UPDATE:
-    
+                const data = await Todo.update(req.body, { where: { id: req.params.id } })
                 res.redirect('/view')
     
             } else {
             // VIEW:
+            // var olan veriyi getir:
+            const data = await Todo.findByPk(req.params.id)
             // Form View:
-                res.render('todoUpdate', { todo:dataValues, priority: PRIORITY })
+                res.render('todoUpdate', { todo:data.dataValues, priority: PRIORITY })
             }
 
     },
@@ -123,8 +125,8 @@ module.exports = {
 
         if (data > 0) { // Silme gerçekleşti ise:
             // res.status(204).send()
-            //? Sadece status çıktı ver:
-            res.sendStatus(204)
+            //? ana sayfaya yönlendir
+            res.redirect('/view')
         } else { // Silme gerçekleşmedi ise:
             // res.status(404).send({
             //     error: true,
