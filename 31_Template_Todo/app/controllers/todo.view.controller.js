@@ -18,9 +18,9 @@ module.exports = {
         // const data = await Todo.findAll()
         const data = await Todo.findAndCountAll({
             // order: [['priority', 'ASC'], ['id', 'DESC']]
-            order: [['id', 'DESC']] // Id'ye göre ters sırala
+            order: [['id', 'DESC']] // Id'ye göre ters sırala en son kaydedilen ilk gösterilir
         })
-        // console.log(data.rows);
+        console.log(data.rows);
 
         // res.status(200).send({
         //     error: false,
@@ -28,6 +28,7 @@ module.exports = {
         // })
 
         //View Template:
+        // db den gelen veriler ile todoList view i render edilir. Veriler view de kullanılacak.
         res.render('todoList', {todos:data.rows, total:data.count, priority:PRIORITY})
     },
 
@@ -51,11 +52,15 @@ module.exports = {
         //     error: false,
         //     result: data.dataValues
         // })
+
+        // formdaki veriler post ile gönderilmiş ise kaydet:
         if(req.method == 'POST'){
             const data = await Todo.create(req.body)
 
         //    data ? res.redirect('/view') : res.redirect('/views/create')
         res.redirect('/view')
+
+        // else kayıt oluşturma sayfası yani boş form görüntüle
         }else {
 
             res.render('todoCreate', {priority:PRIORITY})

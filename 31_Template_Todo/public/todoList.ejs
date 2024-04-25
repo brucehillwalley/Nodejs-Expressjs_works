@@ -31,13 +31,17 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- view controller ından gönderilen veriler -->
                     <%# console.log(total, todos) %>
+                    <%# console.log(priority) %>
+
                     <% for (let todo of todos) { %>
                   <tr>
                         <td># <%= todo.id %></td>
                         <td><%= todo.title %></td>
                         <td><%= todo.description %></td>
                         <!-- <td><%= todo.priority %></td> -->
+                        <!-- database de -1,0,1 tutuluyor -->
                         <td><%= priority[todo.priority] %></td>
                         <td><%= (todo.isDone ? 'Yes' : 'No') %></td>
                         <td><%= todo.createdAt.toLocaleDateString('tr', { year: 'numeric', month: 'long', day: 'numeric' }) %></td>

@@ -23,6 +23,7 @@ router.all('/', todo.list)
 
 // router.get('/create', todo.create)
 // router.post('/create', todo.create)
+// tarayıcıdan get post isteği gelir ayrı ayrı yazmaktansa all yazılır
 router.all('/create', todo.create)
 
 router.all('/:id', todo.read)
