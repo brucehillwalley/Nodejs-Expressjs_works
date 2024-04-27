@@ -16,22 +16,20 @@ const PORT = process.env.PORT || 8000
 
 /* ------------------------------------------------------- */
 // TEMPLATE:
-// $ npm i ejs
-// Default: open and close delimiter is <% %>
-// const ejs = require("ejs")
-// ejs.delimiter = "#" // <# #>
-// ejs.openDelimiter = "{" 
-// ejs.closeDelimiter = "}"
 
-app.set("view engine", "ejs")
-app.set('view options', { 
-    // 'delimeter': '#', 
-    'openDelimiter': '{',
-    'closeDelimiter': '}'
+// Default: open and close delimiter -> <% ... %>
+// const ejs = require('ejs')
+// ejs.delimiter = '#' // <# ... #>
+// ejs.openDelimiter = '{' // {# ... #>
+// ejs.closeDelimiter = '}' // {# ... #}
 
- })
-app.set("views", "./public")
-
+app.set('view engine', 'ejs')
+app.set('view options', {
+    // delimiter: '%',
+    openDelimiter: '{',
+    closeDelimiter: '}',
+})
+app.set('views', './public')
 
 /* ------------------------------------------------------- */
 // SessionCookies:
@@ -52,12 +50,20 @@ app.use(require('./src/middlewares/findSearchSortPage'))
 
 // HomePage:
 app.all('/', (req, res) => {
-    res.send('WELCOME TO BLOG API')
+    res.redirect('/views/blog/post')
+    // res.send('<h1>Welcome to Blog APP</h1>')
 })
 
-// Routes:
-app.use('/user', require('./src/routes/userRoute'))
-app.use('/blog', require('./src/routes/blogRoute'))
+// Routes: // VIEWS:
+app.use('/views/user', require('./src/routes/views/userRoute'))
+app.use('/views/blog', require('./src/routes/views/blogRoute'))
+
+// Routes: // API:
+app.use('/api/user', require('./src/routes/api/userRoute'))
+app.use('/api/blog', require('./src/routes/api/blogRoute'))
+
+// StaticFiles:
+app.use('/assets', express.static('./public/assets'))
 
 /* ------------------------------------------------------- */
 // Synchronization:

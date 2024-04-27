@@ -5,7 +5,7 @@
 
 const router = require('express').Router()
 
-const { User } = require('../controllers/userController')
+const { User } = require('../../controllers/api/userController')
 
 // ------------------------------------------
 // User
