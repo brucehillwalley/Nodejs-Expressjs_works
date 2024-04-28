@@ -15,7 +15,7 @@ require('dotenv').config()
 const PORT = process.env.PORT || 8000
 
 /* ------------------------------------------------------- */
-// TEMPLATE:
+//? TEMPLATE:
 
 // Default: open and close delimiter -> <% ... %>
 // const ejs = require('ejs')
@@ -25,7 +25,7 @@ const PORT = process.env.PORT || 8000
 
 app.set('view engine', 'ejs')
 app.set('view options', {
-    // delimiter: '%',
+    // delimiter: '#', // % => # changed
     openDelimiter: '{',
     closeDelimiter: '}',
 })

@@ -91,11 +91,17 @@ module.exports.BlogPost = {
       .sort({ createdAt: "desc" })
       .limit(3);
 
+      // Url içinde page=x temizle:
+      const pageUrl = req.originalUrl.replace(/[?|&]page=([^&]+)/gi, '')
+
+
+
     res.render("index", {
       categories,
       posts: data,
       recentPosts,
       details: await res.getModelListDetails(BlogPost),
+      pageUrl: (pageUrl.includes('?') ? pageUrl : pageUrl + '?')
     });
   },
 
