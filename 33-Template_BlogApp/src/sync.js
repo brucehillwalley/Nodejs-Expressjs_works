@@ -85,7 +85,8 @@ module.exports = async () => {
                 Fugit dicta quos porro dolor, assumenda aperiam magnam sit eaque voluptate corporis. Facilis voluptatem ea aperiam eveniet hic atque ducimus doloribus, dolorem, vero labore porro earum, nostrum dolore vitae suscipit. </p>
                 `,
                 published: Boolean(key%2),
-                createdAt: now.getTime() + Math.random() * 10e8 // Random Time
+                // createdAt: now.getTime() + Math.random() * 10e8 // Random Time
+                createdAt: now.getTime() // Random Time
             })
         }
     }

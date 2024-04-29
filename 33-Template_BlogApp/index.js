@@ -15,7 +15,7 @@ require('dotenv').config()
 const PORT = process.env.PORT || 8000
 
 /* ------------------------------------------------------- */
-//? TEMPLATE:
+// TEMPLATE:
 
 // Default: open and close delimiter -> <% ... %>
 // const ejs = require('ejs')
@@ -25,7 +25,7 @@ const PORT = process.env.PORT || 8000
 
 app.set('view engine', 'ejs')
 app.set('view options', {
-    // delimiter: '#', // % => # changed
+    // delimiter: '%',
     openDelimiter: '{',
     closeDelimiter: '}',
 })
@@ -42,11 +42,28 @@ app.use(session({ secret: process.env.SECRET_KEY || 'secret_keys_for_cookies' })
 // Accept json data & convert to object:
 app.use(express.json())
 
+// Accept form data & convert to object:
+app.use(express.urlencoded({ extended: true }))
+
 // Connect to MongoDB with Mongoose:
 require('./src/dbConnection')
 
 // Searching&Sorting&Pagination:
 app.use(require('./src/middlewares/findSearchSortPage'))
+
+app.use((req, res, next) => {
+
+    // console.log(req.session?.user)
+
+    // Tüm template dosyalarından erişilebilen data:
+    // res.locals = {
+    //     user: req.session?.user
+    // }
+    res.locals.user = req.session?.user
+
+    next()
+
+})
 
 // HomePage:
 app.all('/', (req, res) => {
@@ -55,7 +72,7 @@ app.all('/', (req, res) => {
 })
 
 // Routes: // VIEWS:
-app.use('/views/user', require('./src/routes/views/userRoute'))
+app.use('/', require('./src/routes/views/userRoute'))
 app.use('/views/blog', require('./src/routes/views/blogRoute'))
 
 // Routes: // API:
@@ -64,6 +81,8 @@ app.use('/api/blog', require('./src/routes/api/blogRoute'))
 
 // StaticFiles:
 app.use('/assets', express.static('./public/assets'))
+// TinyMCE static files:
+app.use('/tinymce', express.static('./node_modules/tinymce'))
 
 /* ------------------------------------------------------- */
 // Synchronization:
